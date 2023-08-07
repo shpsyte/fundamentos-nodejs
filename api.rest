@@ -1,12 +1,13 @@
 @baseUrl = http://localhost:3333
 
 
-### 
+### Get Users by CPF
 GET {{ baseUrl }}/account 
+cpf: 123
 Content-Type: application/json
 
 
-###
+### Create an account
 POST  {{ baseUrl }}/account
 Content-Type: application/json
 
@@ -15,70 +16,46 @@ Content-Type: application/json
     "name": "jose"
 }
 
-###
-GET {{ baseUrl }}/statement/123
+### Get statement by CPF
+GET {{ baseUrl }}/statement
 Content-Type: application/json
+cpf: 123
 
-
-
-
-###  Get All Memories
-GET {{ baseUrl }}/memories 
+### Get statement by CPF and data
+GET {{ baseUrl }}/statement/date?date=2023-08-07
 Content-Type: application/json
-Authorization: Bearer {{ token }}
+cpf: 123
 
-###
- 
-###  Get One Memory By ID
-GET {{ baseUrl }}/memories/4e796340-3218-4d25-9306-779092b0de6b  
+
+### Make a deposit
+POST  {{ baseUrl }}/deposit
 Content-Type: application/json
-
-###
-
-###  Create Memory
-POST {{ baseUrl }}/memories 
-Content-Type: application/json
+cpf: 123
 
 {
-    "content": "test",
-    "coverUrl": "sfs",
-    "isPublic": "1"
+    "amount": 100,
+    "description": "test"
+
+}
+
+
+### Make a withdraw
+POST  {{ baseUrl }}/withdraw
+Content-Type: application/json
+cpf: 123
+  
+  {
+      "amount": 100
+  
+  } 
+
+
+### update the name of the user
+PUT  {{ baseUrl }}/account
+Content-Type: application/json
+cpf: 123
+
+{
+    "name": "jose luiz"
 }
  
-###  Update Memory
-PUT  {{ baseUrl }}/memories/2e52bb8d-9618-4a38-a3c1-92e2ffc93e06
-Content-Type: application/json
-
-{
-    "content": "oi",
-    "coverUrl": "sfs",
-    "isPublic": "1"
-}
-
-
-###  Getting User from Giuthub
-POST  {{ baseUrl }}/register
-Content-Type: application/json
-
-{
-    "code": "f2ff172243e5b65b3965"
-}
-
-###  Getting User from Giuthub
-POST  {{ baseUrl }}/register
-Content-Type: application/json
-
-{
-    "code": "7a7ad352ee0d474b9ffc"
-}
-
-###  update file
-# HTTP POST localhost:3333/upload file@~/Downloads/luz.png -f
-
-POST  {{ baseUrl }}/upload
-Content-Type: multipart/form-data 
-
-
-{
-    "file": @~/Downloads/luz.png
-}
