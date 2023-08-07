@@ -1,49 +1,59 @@
-const express = require('express');
+import express from 'express';
+import { randomUUID } from 'node:crypto';
+import zod from 'zod';
+
 
 const app = express();
 app.use(express.json());
 
+/**
+ * cpf - string
+ * name - string 
+ * id - uuid
+ * statement - []
+ */
 
-app.get('/courses', (req, res) => {
-  // query params
-  // optional params
-  const query = req.query;
-  console.log(query);
+const customers = [];
 
-  return res.json([
-    "Curso 1",
-    "Curso 2",
-    "Curso 3",
-  ]);
+app.get('/account/', (request, response) => {
+  return response.json(customers);
 })
 
-app.post('/courses', (req, res) => {
-
-  // body params
+app.post('/account', (request, response) => {
+  const { cpf, name } = request.body;
+  const id = randomUUID();
   
-  const body = req.body;
-  console.log(body);
-  return res.json([
-    "Curso 1",
-    "Curso 2",
-    "Curso 3",
-    "Curso 4",
-  ]);
+  var schema = zod.object({
+    cpf: zod.string().min(1).max(11),
+    name: zod.string(),
+  })
+  
+  
+  try {
+    var customer = { id, ...schema.parse(request.body), statement: []}
+  } catch (error) {
+    // console.log('error ==>>> ', error);
+     return response.status(400).json({ error });
+  }
+
+  if (!customers.some(customer => customer.cpf === cpf)) {
+    customers.push(customer);
+  }  else {
+    return response.status(400).json({ error: 'CPF already exists' });
+  }
+  
+  return response.status(201).json(customer);
 })
 
-app.put('/courses/:id', (req, res) => {
-  // route params
-  // required params
-  const { id } = req.params;
-  console.log(id);
+app.get('/statement/:cpf', (request, response) => {
+  const { cpf } = request.params;
+  const customer = customers.find(customer => customer.cpf === cpf);
 
-
-  return res.json([
-    "Curso 6",
-    "Curso 2",
-    "Curso 3",
-    "Curso 4",
-  ]);
+  if (!customer) {
+    return response.status(400).json({ error: 'Customer not found' });
+  }
+  
+  return response.json(customer.statement);
 })
 
 app.listen(3333, () => {
