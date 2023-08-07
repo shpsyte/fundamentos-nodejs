@@ -26,6 +26,11 @@ GET {{ baseUrl }}/statement/date?date=2023-08-07
 Content-Type: application/json
 cpf: 123
 
+### Get balance by CPF
+GET {{ baseUrl }}/balance
+Content-Type: application/json
+cpf: 123
+
 
 ### Make a deposit
 POST  {{ baseUrl }}/deposit
@@ -59,3 +64,9 @@ cpf: 123
     "name": "jose luiz"
 }
  
+
+### delete an account
+DELETE  {{ baseUrl }}/account
+Content-Type: application/json
+cpf: 1234
+

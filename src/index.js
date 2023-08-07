@@ -124,6 +124,36 @@ app.put('/account', verifyIfExistsAccountCPF, (request, response) => {
 
 })
 
+app.delete('/account', verifyIfExistsAccountCPF, (request, response) => {
+  const { customer } = request;
+  customers.splice(customer, 1);
+  return response.status(200).json(customers);
+})
+
+app.get('/balance', verifyIfExistsAccountCPF, (request, response) => {
+   const { customer } = request;
+   const balance = getBalance(customer.statement);
+
+   const restult = {
+      name: customer.name,
+      cpf: customer.cpf,
+      balance: balance,
+      history: customer.statement.map(statement => {
+        return {
+          type: statement.type,
+          amount: statement.amount,
+          date: statement.created_at
+        }
+      }
+      )
+   }
+
+
+  return response.status(200).json(restult);
+
+
+})
+
 app.listen(3333, () => {
   console.log('Server is running on port 3333');
 })
