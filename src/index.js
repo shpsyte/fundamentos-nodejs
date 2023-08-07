@@ -4,8 +4,30 @@ const app = express();
 app.use(express.json());
 
 
-app.get('/', (req, res) => {
-  return res.json({ message: 'Hello World...' });
+app.get('/courses', (req, res) => {
+  return res.json([
+    "Curso 1",
+    "Curso 2",
+    "Curso 3",
+  ]);
+})
+
+app.post('/courses', (req, res) => {
+  return res.json([
+    "Curso 1",
+    "Curso 2",
+    "Curso 3",
+    "Curso 4",
+  ]);
+})
+
+app.put('/courses/:id', (req, res) => {
+  return res.json([
+    "Curso 6",
+    "Curso 2",
+    "Curso 3",
+    "Curso 4",
+  ]);
 })
 
 app.listen(3333, () => {
